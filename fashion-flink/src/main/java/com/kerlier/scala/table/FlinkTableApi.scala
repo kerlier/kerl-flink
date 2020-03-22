@@ -28,9 +28,11 @@ object FlinkTableApi {
     tableEnv.registerTableSource("csvTableSource", csvTableSource)
 
     //获取scan对象
-    val csvTable = tableEnv.scan("csvTableSource")
+//    val csvTable = tableEnv.scan("csvTableSource")
+//
+//    val csvResults = csvTable.select("name,age").where("name")
 
-    val csvResults = csvTable.select("name,age")
+    val csvResults = tableEnv.sqlQuery("select name,age from csvTableSource where name is not null and age is not null")
 
     val persons = tableEnv.toAppendStream[Person](csvResults)
 
@@ -41,5 +43,5 @@ object FlinkTableApi {
     environment.execute("csvTableSourceApp")
 
   }
-  case class Person(name:String, age:Int)
+  case class Person(name:String, age:Integer)
 }
